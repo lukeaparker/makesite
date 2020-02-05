@@ -1,39 +1,40 @@
 package main
 
-import ( 
-	"fmt"
-	"io/ioutil"
-	"html/template"
-	"bytes"
+import (
+	  "fmt"
+	  "bytes"
+	  "io/ioutil"
+	  "html/template"
+	  "strings"
+	  "os"
 )
+
 type Content struct {
 	ParText string
-	}
+  }
 
 func main() {
-	postText, err := ioutil.ReadFile("first-post.txt")
-	content := Content{ParText: string(postText)}
-	if err != nil {
-		// A common use of `panic` is to abort if a function returns an error
-		// value that we don’t know how to (or want to) handle. This example
-		// panics if we get an unexpected error when creating a new file.
-		panic(err)
-		}
-		paths := []string{
-		"template.tmpl"}
-		buff := new(bytes.Buffer)
-		t := template.Must(template.New("template.tmpl").ParseFiles(paths...))
-		err = t.Execute(buff, content)
-		fmt.Print(buff.String())
-		if err != nil {
-			panic(err)
-		}
-		bytesToWrite := buff.Bytes()
-        err = ioutil.WriteFile("new-file.txt", bytesToWrite, 0644)
+		filename := os.Args[1]
+        posText, err := ioutil.ReadFile(filename)
         if err != nil {
             panic(err)
-        }
+		}
+		data := Content{ParText: string(posText)}
+		paths := []string{
+			"template.tmpl",
+		  }
+		  buff := new(bytes.Buffer)
+		  t := template.Must(template.New("template.tmpl").ParseFiles(paths...))
+		  err = t.Execute(buff, data)		  
+		  if err != nil {
+		  	panic(err)
+		  }
+		  filename = strings.Replace(filename, ".txt", ".html", 1)
+		  bytesToWrite := []byte(buff.Bytes())
+		  err = ioutil.WriteFile(filename, bytesToWrite, 0644)
+		  if err != nil {
+			  panic(err)
+		  }
+		  fmt.Println(buff)
+
 }
-
-
-
