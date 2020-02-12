@@ -17,8 +17,8 @@ type Content struct {
 
 func main() {
 	buff := new(bytes.Buffer)
-	dir := flag.String("dir", "", "Name of the directory to save the File")
-	fileName := flag.String("file", "", "name of file to write to html")
+	dir := flag.String("dir", ".", "Name of the directory to save the File")
+	fileName := flag.String("file", "first-post.txt", "name of file to write to html")
 	flag.Parse()
 
 	files, err := ioutil.ReadDir(*dir)
@@ -29,7 +29,6 @@ func main() {
 	for _, file := range files {
 		if filepath.Ext(file.Name()) == ".txt" {
 			fmt.Println(file.Name())
-			fmt.Println(*dir)
 
 			posText, err := ioutil.ReadFile(file.Name())
 			if err != nil {
@@ -44,7 +43,7 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			filename := strings.Replace(*fileName, ".txt", ".html", 1)
+			filename := strings.Replace(*file.Name, ".txt", ".html", 1)
 			bytesToWrite := []byte(buff.Bytes())
 			err = ioutil.WriteFile(filename, bytesToWrite, 0644)
 			if err != nil {
