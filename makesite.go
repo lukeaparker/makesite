@@ -9,6 +9,8 @@ import (
 	"log"
 	"path/filepath"
 	"strings"
+
+	"github.com/gomarkdown/markdown"
 )
 
 type Content struct {
@@ -50,10 +52,20 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-
 		}
-	}
-	fmt.Println(buff)
-	fmt.Println(fileName)
+		for _, file := range files {
+			if filepath.Ext(file.Name()) == ".md" {
+				fileContents, err := ioutil.ReadFile(*fileName)
+				if err != nil {
+					panic(err)
+				}
+				mdBytes := []byte(fileContents)
+				output := markdown.ToHTML(mdBytes, nil, nil)
+				fmt.Println(output)
+			}
+		}
+		fmt.Println(buff)
+		fmt.Println(fileName)
 
+	}
 }
