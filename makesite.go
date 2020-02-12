@@ -19,6 +19,7 @@ func main() {
 	buff := new(bytes.Buffer)
 	dir := flag.String("dir", ".", "Name of the directory to save the File")
 	fileName := flag.String("file", "first-post.txt", "name of file to write to html")
+
 	flag.Parse()
 
 	files, err := ioutil.ReadDir(*dir)
@@ -43,7 +44,7 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			filename := strings.Replace(*file.Name, ".txt", ".html", 1)
+			filename := strings.Replace(file.Name(), ".txt", ".html", 1)
 			bytesToWrite := []byte(buff.Bytes())
 			err = ioutil.WriteFile(filename, bytesToWrite, 0644)
 			if err != nil {
@@ -53,4 +54,6 @@ func main() {
 		}
 	}
 	fmt.Println(buff)
+	fmt.Println(fileName)
+
 }
