@@ -62,6 +62,7 @@ func main() {
 				mdBytes := []byte(fileContents)
 				output := markdown.ToHTML(mdBytes, nil, nil)
 				fmt.Println(output)
+				buff.Reset()
 			}
 		}
 		fmt.Println(buff)
